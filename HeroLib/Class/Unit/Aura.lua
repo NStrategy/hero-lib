@@ -106,7 +106,11 @@ function Unit:BuffRemains(ThisSpell, AnyCaster, BypassRecovery)
   -- Stealth-like buffs (Subterfurge and Master Assassin) are delayed but within aura latency
   local SpellID = ThisSpell:ID()
   if SpellID == 115192 or SpellID == 256735 then
-    ExpirationTime = ExpirationTime - 0.3
+    if SpellID == 381664 then  -- Assassination only
+      ExpirationTime = ExpirationTime - 0.2
+    else
+      ExpirationTime = ExpirationTime
+    end
   end
 
   local Remains = ExpirationTime - GetTime() - HL.RecoveryOffset(BypassRecovery)
