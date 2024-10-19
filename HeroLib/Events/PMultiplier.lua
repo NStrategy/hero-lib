@@ -1,21 +1,23 @@
 --- ============================ HEADER ============================
 --- ======= LOCALIZE =======
 -- Addon
-local addonName, HL = ...
+local addonName, HL  = ...
 -- HeroLib
-local Cache = HeroCache
-local Unit = HL.Unit
-local Player = Unit.Player
-local Pet = Unit.Pet
-local Target = Unit.Target
-local Spell = HL.Spell
-local Item = HL.Item
--- Lua
-local pairs = pairs
-local GetTime = GetTime
+local Cache          = HeroCache
+local Unit           = HL.Unit
+local Player         = Unit.Player
+local Pet            = Unit.Pet
+local Target         = Unit.Target
+local Spell          = HL.Spell
+local Item           = HL.Item
+
+-- Lua locals
+local pairs          = pairs
+local GetTime        = GetTime
+
 -- File Locals
 local ListenedSpells = {}
-local ListenedAuras = {}
+local ListenedAuras  = {}
 
 
 --- ============================ CONTENT ============================
@@ -121,12 +123,14 @@ HL:RegisterForSelfCombatEvent(
 
     local ListenedSpell = ListenedSpells[ListenedAura]
     if not ListenedSpell then return end
-
+    
+    local PMultiplier = ComputePMultiplier(ListenedSpell)
     local Dot = ListenedSpell.Units[DestGUID]
     if Dot then
+      Dot.PMultiplier = PMultiplier
       Dot.Applied = true
     else
-      ListenedSpell.Units[DestGUID] = { PMultiplier = 0, Time = GetTime(), Applied = true }
+      ListenedSpell.Units[DestGUID] = { PMultiplier = PMultiplier, Time = GetTime(), Applied = true }
     end
   end,
   "SPELL_AURA_APPLIED", "SPELL_AURA_REFRESH"
